@@ -1,0 +1,14 @@
+# Logs
+logs
+*.log
+npm-debug.log.*
+
+# Dependency directory
+node_modules
+
+#build
+build
+.idea
+*.pyc
+*.DS_Store
+package-lock.json

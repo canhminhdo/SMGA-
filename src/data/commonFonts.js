@@ -1,0 +1,21 @@
+export default [
+    "Calibri",
+    "Helvetica",
+    "Arial",
+    "Times",
+    "Times New Roman",
+    "Courier",
+    "Courier New",
+    "Verdana",
+    "Tahoma",
+    "Arial Black",
+    "Comic Sans MS",
+    "Impact",
+    "Avant Garde",
+    "Georgia",
+    "Palatino",
+    "Bookman",
+    "Garamond",
+    "Century Schoolbook",
+    "Andale Mono"
+];
