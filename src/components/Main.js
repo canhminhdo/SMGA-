@@ -23,13 +23,11 @@ export const ZOOM_RATIO = 1.2;
 var Main = ContextMenuLayer("context_menu_main")(React.createClass({
     componentDidMount: function() {
         // Create Konva Stage fit with browser window size
-        this.maxWidth = window.innerWidth
-                        - 2 * parseFloat($('body').css('padding'))
-                        - parseFloat($('#protocol-editor').css('border-width')) * 2;
+        this.maxWidth = parseFloat($('#protocol-editor').css('width'))
+                        - 2 * parseFloat($('#protocol-editor').css('margin-left'));
         this.maxHeight = window.innerHeight
-                        - $('#panel').height()
-                        - parseFloat($('#panel').css("padding-bottom"))
-                        - 2 * parseFloat($('body').css('padding'))
+                        - parseFloat($('#protocol-editor').css('margin-top'))
+                        - parseFloat($('#protocol-editor').css('margin-bottom'))
                         - parseFloat($('#protocol-editor').css('border-width')) * 2;
         this.stage = new Konva.Stage({
             container: 'protocol-editor',
@@ -41,6 +39,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         this.updateData();
     },
     updateData: function() {
+        this.autoScaleStage();
         const { stage } = this;
         stage.destroyChildren();
         const drawInfo = this.state.data.drawInfo;
@@ -61,11 +60,14 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         stage.add(prinLayer);
         stage.add(msgLayer);
         stage.draw();
-        this.autoScaleStage();
     },
     autoScaleStage: function() {
+        if (window.drawInfo == undefined) {
+            return;
+        }
         if (window.drawInfo.yPos > this.maxHeight - 100) {
             this.maxHeight = this.maxHeight * 1.5;
+            this.stage.setHeight(this.maxHeight);
         }
     },
     getInitialState() {
@@ -166,10 +168,10 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
             <div>
                 <div id="panel">
                     <Button className="btn btn-primary" onClick={this.selectFile}>Select File</Button>
-                    <Button className="btn btn-default"><i className="fa fa-play" aria-hidden="true"></i> Play</Button>{' '}
-                    <Button className="btn btn-default"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button>{' '}
-                    <Button className="btn btn-default"><i className="fa fa-stop" aria-hidden="true"></i> Stop</Button>{' '}
-                    <Button className="btn btn-default" onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>{' '}
+                    <Button className="btn btn-default"><i className="fa fa-play" aria-hidden="true"></i> Play</Button>
+                    <Button className="btn btn-default"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button>
+                    <Button className="btn btn-default"><i className="fa fa-stop" aria-hidden="true"></i> Stop</Button>
+                    <Button className="btn btn-default" onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>
                     <Button className="btn btn-default" onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
                     <Select className="select-font-family"
                         name="select-font-family"
