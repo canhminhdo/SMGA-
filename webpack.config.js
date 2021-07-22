@@ -25,11 +25,16 @@ module.exports = {
 
   module: {
     loaders: [
+      { test: /\.css$/, loader: "style-loader!css-loader" },
       {
         test: /\.js?$/,
         loaders: ['react-hot', 'babel'],
         exclude: /node_modules/
       },
+      {
+        test: /\.(otf|eot|svg|ttf|woff)/,
+        loader: 'url-loader?limit=8192'
+      }
     ]
   },
 

@@ -10,6 +10,13 @@ import Select from 'react-select';
 import $ from 'jquery'
 import commonFonts from '../data/commonFonts'
 import { Button } from 'react-bootstrap'
+import * as parser from '../util/stateParser'
+
+import 'react-select/dist/react-select.css'
+import 'bootstrap/dist/css/bootstrap.css'
+import '../style/font-awesome/css/font-awesome.min.css'
+import '../style/context-menu.css'
+import '../style/main.css'
 
 export const ZOOM_RATIO = 1.2;
 
@@ -22,8 +29,6 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         this.maxHeight = window.innerHeight
                         - $('#panel').height()
                         - parseFloat($('#panel').css("padding-bottom"))
-                        - $('#control-buttons').height()
-                        - parseFloat($('#control-buttons').css("margin-bottom"))
                         - 2 * parseFloat($('body').css('padding'))
                         - parseFloat($('#protocol-editor').css('border-width')) * 2;
         this.stage = new Konva.Stage({
@@ -35,17 +40,46 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         const stage = this.stage;
         this.updateData();
     },
+    updateData: function() {
+        const { stage } = this;
+        stage.destroyChildren();
+        const drawInfo = this.state.data.drawInfo;
+        let prinLayer = new Konva.Layer(); // for principals
+        let msgLayer = new Konva.Layer(); // for messages
+        const prins = _.map(this.state.data.protocol.prins, (prinModel) => {
+            return ProtocolComponent.getPrinObject(prinModel, drawInfo);
+        });
+        _.each(prins, (prin) => {
+            prinLayer.add(prin);
+        });
+        const messages = _.map(this.state.data.protocol.messages, (msgModel) => {
+            return ProtocolComponent.getMessageObject(msgModel, drawInfo);
+        });
+        _.each(messages, (msg) => {
+            msgLayer.add(msg);
+        });
+        stage.add(prinLayer);
+        stage.add(msgLayer);
+        stage.draw();
+        this.autoScaleStage();
+    },
+    autoScaleStage: function() {
+        if (window.drawInfo.yPos > this.maxHeight - 100) {
+            this.maxHeight = this.maxHeight * 1.5;
+        }
+    },
     getInitialState() {
-        // Loading default data
         return {
             data: _.defaultsDeep(ProtocolModel.getInitial(), {
                 drawInfo: {
-                    fontSize: ProtocolComponent.COLUMN_DEFAULT_FONT_SIZE,
+                    fontSize: ProtocolComponent.DEFAULT_FONT_SIZE,
                     fontFamily: ProtocolComponent.DEFAULT_FONT_FAMILY,
                     scale: {x: 1, y: 1},
                     origin: {x: 0, y: 0}
                 },
-                tables: []
+                protocol: {
+
+                }
             })
         }
     },
@@ -68,16 +102,6 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         stage.scale(newScale);
         stage.batchDraw();
     },
-    updateData: function() {
-        const { stage } = this;
-        const self = this;
-        stage.destroyChildren();
-        let layer = new Konva.Layer();
-        let rect = new Konva.Rect({x: 20, y: 50, width: 100, height: 100, fill: "red"});
-        layer.add(rect);
-        stage.add(layer);
-        stage.draw();
-    },
     changeFontSize: function({ value }) {
         this.setState(update(this.state, { data: { drawInfo: { fontSize: { $set: value } } } }));
     },
@@ -90,11 +114,63 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
     renderSelectFontSize: function({ label, value }) {
         return <div style={{ fontSize: value }} > { label } </div>
     },
+    selectFile: function() {
+        $('.importStateSeq').click();
+    },
+    stateSeqHandler: function(event) {
+        var self = this;
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            let result = event.target.result;
+            let protocol = parser.fileContent2message(result);
+            protocol.current = 0;
+            protocol.messages = [];
+            // protocol.messages = protocol.network;
+            const prins = self.state.data.protocol.prins;
+            if (protocol.prins) {
+                for (let i = 0; i < protocol.prins.length; i ++) {
+                    if (prins[i]) {
+                        protocol.prins[i].drawInfo = prins[i].drawInfo;
+                    }
+                }
+            }
+            self.setState(update(self.state, { data: { protocol: { $set: protocol } } }));
+        };
+        reader.readAsText(file);
+    },
+    next: function(event) {
+        let current = this.state.data.protocol.current;
+        let messages = this.state.data.protocol.messages;
+        let network = this.state.data.protocol.network;
+        if (current < network.length) {
+            messages.push(network[current]);
+            current ++;
+            this.setState(update(this.state, { data: { protocol: { current: {$set: current}, messages : {$set: messages} } } }));
+            this.updateData();
+        }
+    },
+    prev: function(event) {
+        let current = this.state.data.protocol.current;
+        let messages = this.state.data.protocol.messages;
+        if (current > 0) {
+            messages.pop();
+            current --;
+            this.setState(update(this.state, { data: { protocol: { current: {$set: current}, messages : {$set: messages} } } }));
+            this.updateData();
+        }
+    },
     render() {
         const { fontFamily, fontSize } = this.state.data.drawInfo;
         return (
             <div>
                 <div id="panel">
+                    <Button className="btn btn-primary" onClick={this.selectFile}>Select File</Button>
+                    <Button className="btn btn-default"><i className="fa fa-play" aria-hidden="true"></i> Play</Button>{' '}
+                    <Button className="btn btn-default"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button>{' '}
+                    <Button className="btn btn-default"><i className="fa fa-stop" aria-hidden="true"></i> Stop</Button>{' '}
+                    <Button className="btn btn-default" onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>{' '}
+                    <Button className="btn btn-default" onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
                     <Select className="select-font-family"
                         name="select-font-family"
                         value={ fontFamily }
@@ -119,19 +195,12 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         optionRenderer={ this.renderSelectFontSize }
                     />
                     <div style={ { visibility: 'hidden', height: 0 } }>
-                        <FileInput className="importJson"
-                        accept=".json"
-                        placeholder="Import JSON"
-                        onChange={ this.loadFileJsonHandler }
+                        <FileInput className="importStateSeq"
+                        placeholder="Import State Sequence"
+                        onChange={ this.stateSeqHandler }
                         />
                     </div>
-                </div>
-                <div id="control-buttons" className="text-center mb-10">
-                    <Button>Prev</Button>{' '}
-                    <Button>Play</Button>{' '}
-                    <Button>Pause</Button>{' '}
-                    <Button>Stop</Button>{' '}
-                    <Button>Next</Button>
+
                 </div>
                 <div id="protocol-editor" ></div>
                 <div>

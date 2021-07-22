@@ -1,4 +1,4 @@
-﻿export function getInitial() {
+export function getInitial() {
     return {
         "drawInfo": {
             "scale": {

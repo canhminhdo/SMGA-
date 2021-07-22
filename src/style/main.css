@@ -11,25 +11,7 @@ body {
     box-sizing: border-box;
 }
 #panel .btn {
-    display: inline-block;
-    height: 36px;
-    text-align: left;
-    border: 0;
-    font-size: 18px;
-    padding-left: 15px;
-    padding-right: 15px;
-    border-radius: 15px 30px 15px;
-    vertical-align: top;
     margin-right: 16px;
-    outline:0;
-}
-#panel .btn:hover {
-    background: darkolivegreen;
-    color: white;
-}
-#panel .btn:active {
-    background: goldenrod;
-    color: white;
 }
 #protocol-editor {
     border: 1px solid black;
