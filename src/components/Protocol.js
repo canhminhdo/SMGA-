@@ -66,12 +66,10 @@ function messageTooltip(msg = {}, options = {}) {
 }
 
 export function getMessageObject(msg = {}, options = {}) {
-    const stage = window.stage;
     let drawInfo = window.drawInfo;
-    const isR2L = drawInfo.prins.indexOf(msg.sender) < drawInfo.prins.indexOf(msg.receiver);
     const xStart = drawInfo[msg.sender].x;
     const yStart = drawInfo.yPos;
-    let xEnd, yEnd;
+    let xEnd;
     if (msg.sender != INTRDR_ID && msg.receiver != INTRDR_ID) {
         xEnd = drawInfo[INTRDR_ID].x - xStart;
         const padding = (drawInfo[msg.receiver].x - drawInfo[INTRDR_ID].x) / 2
@@ -81,7 +79,7 @@ export function getMessageObject(msg = {}, options = {}) {
     }
     let group = new Konva.Group({x: xStart, y: yStart});
     let labelX = xEnd / 2 ;
-    let msgLabel = messageTooltip(msg, {x: labelX, y: 0});
+    let msgLabel = messageTooltip(msg, {x: labelX, y: 0, ...options});
     const arrowMsg = new Konva.Arrow({
         x: 0,
         y: 0,

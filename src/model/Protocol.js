@@ -29,7 +29,7 @@
                     name: "Intrdr",
                     id: "intrdr",
                     drawInfo: {
-                        x: 500,
+                        x: 600,
                         y: 50,
                         border: "red",
                         background: "red",
@@ -41,7 +41,7 @@
                     name: "Q",
                     id: "q",
                     drawInfo: {
-                        x: 800,
+                        x: 1000,
                         y: 50,
                         border: "black",
                         background: "green",

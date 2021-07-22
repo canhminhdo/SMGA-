@@ -14,7 +14,7 @@ import * as parser from '../util/stateParser'
 
 import 'react-select/dist/react-select.css'
 import 'bootstrap/dist/css/bootstrap.css'
-import '../style/font-awesome/css/font-awesome.min.css'
+import 'font-awesome/css/font-awesome.css'
 import '../style/context-menu.css'
 import '../style/main.css'
 
@@ -35,7 +35,6 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
             height: this.maxHeight
         });
         window.stage = this.stage;
-        const stage = this.stage;
         this.updateData();
     },
     updateData: function() {

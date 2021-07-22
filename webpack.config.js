@@ -32,8 +32,8 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(otf|eot|svg|ttf|woff)/,
-        loader: 'url-loader?limit=8192'
+        test: /\.(woff2?|ttf|svg|eot)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader',
       }
     ]
   },

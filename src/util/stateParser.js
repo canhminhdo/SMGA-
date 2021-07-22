@@ -145,7 +145,7 @@ function loadDataSet(lines, keys) {
             var line = trimedLine.substring(1, trimedLine.length - 1) || ""; // each state include "()" except last state: (..) || (..) || ..
 
             // in case last line
-            if ((i == numOfLines - 1) && checkUndefined(lines[i]) == false) {
+            if ((i == numOfLines - 1) && checkUndefined(lines[i]) === false) {
                 var str = trimedLine;
                 if (str[0] != "(") line = trimedLine || "";
             }

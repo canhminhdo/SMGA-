@@ -20,8 +20,8 @@ module.exports = {
         loader: 'babel'
       },
       {
-        test: /\.(otf|eot|svg|ttf|woff)/,
-        loader: 'url-loader?limit=8192'
+        test: /\.(woff2?|ttf|svg|eot|otf)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader',
       }
     ]
   },
