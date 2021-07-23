@@ -53,10 +53,17 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         _.each(prins, (prin) => {
             prinLayer.add(prin);
         });
-        const messages = _.map(this.state.data.protocol.messages, (msgModel) => {
-            return ProtocolComponent.getMessageObject(msgModel, drawInfo);
+        let messages = _.map(this.state.data.protocol.messages, (msgModel) => {
+            let revMsg = _.map(msgModel.revMsg, (msg) => {
+                return ProtocolComponent.getMessageObject(msg, drawInfo, true);
+            });
+            let sendMsg = _.map(msgModel.sendMsg, (msg) => {
+                return ProtocolComponent.getMessageObject(msg, drawInfo, false);
+            })
+            return _.concat(revMsg, sendMsg);
         });
-        _.each(messages, (msg) => {
+        const fmessages = _.flatten(messages);
+        _.each(fmessages, (msg) => {
             msgLayer.add(msg);
         });
         stage.add(prinLayer);

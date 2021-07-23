@@ -14,7 +14,7 @@
             interval: null,
             isPlaying: false,
             speed: 500,
-            current: 6,
+            current: 1,
             prins: [
                 {
                     name: "P",
@@ -54,34 +54,80 @@
                 }
             ],
             messages: [
-                {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "M1", type: "m1"},
-                {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "M2", type: "m2"},
-                {sender: "intrdr", receiver: "q", seemSender: "p", ciphertext: "M3", type: "m3"},
-                {sender: "q", receiver: "intrdr", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "q", receiver: "p", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "intrdr", receiver: "p", seemSender: "p", ciphertext: "M4", type: "m4"},
+                {
+                    revMsg : [
+                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "from P", type: "m1"},
+                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "from Q", type: "m2"},
+                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m3"},
+                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "from P", type: "m1"},
+                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m2"},
+                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "from Q", type: "m3"},
+                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m1"},
+                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from P", type: "m2"},
+                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Q", type: "m3"},
+                    ],
+                    sendMsg: [
+                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1"},
+                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2"},
+                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3"},
+                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m1"},
+                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2"},
+                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3"},
+                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1"},
+                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m2"},
+                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m3"}
+                    ]
+                }
             ],
             network: [
-                {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "M1", type: "m1"},
-                {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "M2", type: "m2"},
-                {sender: "intrdr", receiver: "q", seemSender: "p", ciphertext: "M3", type: "m3"},
-                {sender: "q", receiver: "intrdr", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "q", receiver: "p", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "intrdr", receiver: "p", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "M1", type: "m1"},
-                {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "M2", type: "m2"},
-                {sender: "intrdr", receiver: "q", seemSender: "p", ciphertext: "M3", type: "m3"},
-                {sender: "q", receiver: "intrdr", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "M1", type: "m1"},
-                {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "M2", type: "m2"},
-                {sender: "intrdr", receiver: "q", seemSender: "p", ciphertext: "M3", type: "m3"},
-                {sender: "q", receiver: "intrdr", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "q", receiver: "p", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "intrdr", receiver: "p", seemSender: "p", ciphertext: "M4", type: "m4"},
-                {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "M1", type: "m1"},
-                {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "M2", type: "m2"},
-                {sender: "intrdr", receiver: "q", seemSender: "p", ciphertext: "M3", type: "m3"},
-                {sender: "q", receiver: "intrdr", seemSender: "p", ciphertext: "M4", type: "m4"},
+                {
+                    revMsg : [
+                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "from P", type: "m1"},
+                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "from Q", type: "m2"},
+                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m3"},
+                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "from P", type: "m1"},
+                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m2"},
+                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "from Q", type: "m3"},
+                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m1"},
+                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from P", type: "m2"},
+                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Q", type: "m3"},
+                    ],
+                    sendMsg: [
+                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1"},
+                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2"},
+                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3"},
+                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m1"},
+                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2"},
+                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3"},
+                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1"},
+                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m2"},
+                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m3"}
+                    ]
+                },
+                {
+                    revMsg : [
+                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "from P", type: "m1"},
+                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "from Q", type: "m2"},
+                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m3"},
+                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "from P", type: "m1"},
+                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m2"},
+                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "from Q", type: "m3"},
+                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m1"},
+                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from P", type: "m2"},
+                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Q", type: "m3"},
+                    ],
+                    sendMsg: [
+                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1"},
+                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2"},
+                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3"},
+                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m1"},
+                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2"},
+                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3"},
+                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1"},
+                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m2"},
+                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m3"}
+                    ]
+                },
             ]
         }
     };
