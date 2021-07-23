@@ -210,11 +210,11 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
             <div>
                 <div id="panel">
                     <Button disabled={ isPlaying } className="btn btn-primary" onClick={this.selectFile}>Select File</Button>
-                    { !isPlaying && <Button onClick={this.play} className="btn btn-default"><i className="fa fa-play" aria-hidden="true"></i> Play</Button> }
-                    { isPlaying && <Button onClick={this.pause} className="btn btn-default"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button> }
-                    <Button className="btn btn-default" onClick={this.reset}><i className="fa fa-refresh" aria-hidden="true"></i> Reset</Button>
-                    <Button className="btn btn-default" disabled={ isPlaying } onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>
-                    <Button className="btn btn-default" disabled={ isPlaying } onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
+                    { !isPlaying && <Button onClick={this.play} className="btn btn-success"><i className="fa fa-play" aria-hidden="true"></i> Play</Button> }
+                    { isPlaying && <Button onClick={this.pause} className="btn btn-danger"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button> }
+                    <Button className="btn btn-info" disabled={ isPlaying } onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>
+                    <Button className="btn btn-info" disabled={ isPlaying } onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
+                    <Button className="btn btn-warning" onClick={this.reset}><i className="fa fa-refresh" aria-hidden="true"></i> Reset</Button>
                     <Select className="select-font-family"
                         name="select-font-family"
                         value={ fontFamily }
