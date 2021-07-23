@@ -11,6 +11,9 @@
             }
         },
         "protocol": {
+            interval: null,
+            isPlaying: false,
+            speed: 500,
             current: 6,
             prins: [
                 {

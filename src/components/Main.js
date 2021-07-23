@@ -29,13 +29,16 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         - parseFloat($('#protocol-editor').css('margin-top'))
                         - parseFloat($('#protocol-editor').css('margin-bottom'))
                         - parseFloat($('#protocol-editor').css('border-width')) * 2;
+        this.createStage();
+        this.updateData();
+    },
+    createStage: function() {
         this.stage = new Konva.Stage({
             container: 'protocol-editor',
             width: this.maxWidth,
             height: this.maxHeight
         });
         window.stage = this.stage;
-        this.updateData();
     },
     updateData: function() {
         this.autoScaleStage();
@@ -64,10 +67,15 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         if (window.drawInfo == undefined) {
             return;
         }
-        if (window.drawInfo.yPos > this.maxHeight - 100) {
-            this.maxHeight = this.maxHeight * 1.5;
-            this.stage.setHeight(this.maxHeight);
+        const currHeight = this.stage.getHeight();
+        if (window.drawInfo.yPos > currHeight - 100) {
+            this.stage.setHeight(currHeight  * 1.5);
+            window.scrollTo(0, document.body.scrollHeight);
         }
+    },
+    resetStage: function() {
+        this.stage.setHeight(this.maxHeight);
+        delete window.drawInfo;
     },
     getInitialState() {
         return {
@@ -116,7 +124,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         return <div style={{ fontSize: value }} > { label } </div>
     },
     selectFile: function() {
-        $('.importStateSeq').click();
+        $('.importStateSeq').trigger("click");
     },
     stateSeqHandler: function(event) {
         var self = this;
@@ -127,7 +135,9 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
             let protocol = parser.fileContent2message(result);
             protocol.current = 0;
             protocol.messages = [];
-            // protocol.messages = protocol.network;
+            protocol.interval = null;
+            protocol.interval = false;
+            protocol.speed = 500;
             const prins = self.state.data.protocol.prins;
             if (protocol.prins) {
                 for (let i = 0; i < protocol.prins.length; i ++) {
@@ -149,7 +159,9 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
             current ++;
             this.setState(update(this.state, { data: { protocol: { current: {$set: current}, messages : {$set: messages} } } }));
             this.updateData();
+            return true;
         }
+        return false;
     },
     prev: function(event) {
         let current = this.state.data.protocol.current;
@@ -161,17 +173,48 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
             this.updateData();
         }
     },
+    reset: function() {
+        this.pause();
+        $('html,body').scrollTop(0);
+        this.setState(update(this.state, { data: { protocol: {
+            isPlaying: {$set: false},
+            current: {$set: 0},
+            messages: {$set: []},
+        } } }));
+        this.resetStage();
+    },
+    play: function() {
+        const self = this;
+        const interval = setInterval(() => {
+            if (!self.next()) {
+                self.pause();
+            }
+        }, this.state.data.protocol.speed);
+        self.setState(update(this.state, { data: { protocol: {
+            isPlaying: {$set: true},
+            interval: {$set: interval}
+        } } }));
+    },
+    pause: function() {
+        clearInterval(this.state.data.protocol.interval);
+        this.setState(update(this.state, { data: { protocol: { isPlaying: {$set: false} } } }));
+    },
+    sliderChange: function(event) {
+        const newSpeed = event.target.value;
+        this.setState(update(this.state, { data: { protocol: { speed: {$set: newSpeed} } } }));
+    },
     render() {
         const { fontFamily, fontSize } = this.state.data.drawInfo;
+        const { isPlaying, speed } = this.state.data.protocol;
         return (
             <div>
                 <div id="panel">
-                    <Button className="btn btn-primary" onClick={this.selectFile}>Select File</Button>
-                    <Button className="btn btn-default"><i className="fa fa-play" aria-hidden="true"></i> Play</Button>
-                    <Button className="btn btn-default"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button>
-                    <Button className="btn btn-default"><i className="fa fa-stop" aria-hidden="true"></i> Stop</Button>
-                    <Button className="btn btn-default" onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>
-                    <Button className="btn btn-default" onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
+                    <Button disabled={ isPlaying } className="btn btn-primary" onClick={this.selectFile}>Select File</Button>
+                    { !isPlaying && <Button onClick={this.play} className="btn btn-default"><i className="fa fa-play" aria-hidden="true"></i> Play</Button> }
+                    { isPlaying && <Button onClick={this.pause} className="btn btn-default"><i className="fa fa-pause" aria-hidden="true"></i> Pause</Button> }
+                    <Button className="btn btn-default" onClick={this.reset}><i className="fa fa-refresh" aria-hidden="true"></i> Reset</Button>
+                    <Button className="btn btn-default" disabled={ isPlaying } onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>
+                    <Button className="btn btn-default" disabled={ isPlaying } onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
                     <Select className="select-font-family"
                         name="select-font-family"
                         value={ fontFamily }
@@ -201,7 +244,10 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         onChange={ this.stateSeqHandler }
                         />
                     </div>
-
+                    <div className="slidecontainer">
+                        <input type="range" min="0" max="1000" onChange={this.sliderChange} value={speed} className="slider" />
+                        <span>Value: {speed}ms</span>
+                    </div>
                 </div>
                 <div id="protocol-editor" ></div>
                 <div>
