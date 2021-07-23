@@ -11,10 +11,14 @@ import $ from 'jquery'
 import commonFonts from '../data/commonFonts'
 import { Button } from 'react-bootstrap'
 import * as parser from '../util/stateParser'
+import { ToastContainer, ToastMessage } from "react-toastr"
+const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 import 'react-select/dist/react-select.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'font-awesome/css/font-awesome.css'
+import 'animate.css'
+import '../style/toastr.min.css'
 import '../style/context-menu.css'
 import '../style/main.css'
 
@@ -138,22 +142,30 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         var file = event.target.files[0];
         var reader = new FileReader();
         reader.onload = function(event) {
-            let result = event.target.result;
-            let protocol = parser.fileContent2message(result);
-            protocol.current = 0;
-            protocol.messages = [];
-            protocol.interval = null;
-            protocol.interval = false;
-            protocol.speed = 500;
-            const prins = self.state.data.protocol.prins;
-            if (protocol.prins) {
-                for (let i = 0; i < protocol.prins.length; i ++) {
-                    if (prins[i]) {
-                        protocol.prins[i].drawInfo = prins[i].drawInfo;
+            try {
+                let result = event.target.result;
+                let protocol = parser.fileContent2message(result);
+                protocol.current = 0;
+                protocol.messages = [];
+                protocol.interval = null;
+                protocol.interval = false;
+                protocol.speed = 500;
+                const prins = self.state.data.protocol.prins;
+                if (protocol.prins) {
+                    for (let i = 0; i < protocol.prins.length; i ++) {
+                        if (prins[i]) {
+                            protocol.prins[i].drawInfo = prins[i].drawInfo;
+                        }
                     }
                 }
+                self.setState(update(self.state, { data: { protocol: { $set: protocol } } }));
+                self.refs.toast.success("Load state sequence successfully.");
+            } catch (error) {
+                self.refs.toast.success("Cannot parse state sequence.");
             }
-            self.setState(update(self.state, { data: { protocol: { $set: protocol } } }));
+        };
+        reader.onerror = function(event) {
+            self.refs.toast.error("Cannot state sequence.");
         };
         reader.readAsText(file);
     },
@@ -264,6 +276,9 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         <MenuItem onClick={ () => this.resetZoom() } >Reset Zoom</MenuItem>
                     </ContextMenu>
                 </div>
+                <ToastContainer ref="toast"
+                        toastMessageFactory={ToastMessageFactory}
+                        className="toast-top-right"/>
             </div>
         )
     },
