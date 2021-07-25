@@ -83,24 +83,68 @@ export function fileContent2message(fileContent){
     result.prins[0].name = prins[0];
     result.prins[1].name = prins[2];
     result.prins[2].name = prins[1];
-    let tempResult = {
-        sender: "",
-        receiver: "",
-        seemSender: "",
-        ciphertext: "",
-        type: ""
+    let formatOneMessage = function(){
+        let temp = {
+            sendMsg: [],
+            revMsg: []
+        }
+        return temp;
+    };
+
+    let tempResult = function(){
+        let temp = {
+            sender: "",
+            receiver: "",
+            seemSender: "",
+            ciphertext: "",
+            type: ""
+        }
+        return temp;
     }
+
     for (let i = 0; i < dataset.length; i++){
+        // get newmsg
         let messContent = dataset[i]['newmsg'];
         let parseResult = Parser(messContent);
-        let rs = _.clone(tempResult);
+        let rs = tempResult();
         rs.type = messContent[0] + messContent[1];
         rs.seemSender = getElementParserByIndexArray(parseResult, [0, 1]);
         rs.sender = getElementParserByIndexArray(parseResult, [0, 0]);
         rs.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
         rs.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
-        result.network.push(rs);
+        
+        let cloneFormatOneMessage = formatOneMessage();
+        
+        cloneFormatOneMessage.sendMsg.push(rs);
+        // get recmsg1
+        messContent = dataset[i]['recmsg1'];
+        parseResult = Parser(messContent);
+        let rs1 = tempResult();
+        if (parseResult.isMessage !== false){
+            rs1.type = messContent[0] + messContent[1];
+            rs1.seemSender = getElementParserByIndexArray(parseResult, [0, 1]);
+            rs1.sender = getElementParserByIndexArray(parseResult, [0, 0]);
+            rs1.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
+            rs1.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
+            cloneFormatOneMessage.revMsg.push(rs1);
+        }
+        
+        // get recmsg2
+        messContent = dataset[i]['recmsg2'];
+        parseResult = Parser(messContent);
+        let rs2 = tempResult();
+        if (parseResult.isMessage !== false){
+            rs2.type = messContent[0] + messContent[1];
+            rs2.seemSender = getElementParserByIndexArray(parseResult, [0, 1]);
+            rs2.sender = getElementParserByIndexArray(parseResult, [0, 0]);
+            rs2.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
+            rs2.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
+            cloneFormatOneMessage.revMsg.push(rs2);
+        }
+        
+        result.network.push(cloneFormatOneMessage);
     }
+    console.log(result);
     return result;
 }
 
@@ -267,6 +311,9 @@ function Parser(str){
 function getElementParserByIndexArray(mess, array2compare){
     let tmp = mess;
     for (let i = 0; i < array2compare.length; ++i){
+        if (tmp._para[array2compare[i]] === undefined){
+            return null;
+        }
         tmp = tmp._para[array2compare[i]];
     }
     return tmp._value;
