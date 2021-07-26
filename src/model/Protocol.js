@@ -53,32 +53,6 @@
                     }
                 }
             ],
-            messages: [
-                {
-                    revMsg : [
-                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "from P", type: "m1", isFake: false},
-                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "from Q", type: "m2", isFake: false},
-                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m3", isFake: false},
-                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "from P", type: "m1", isFake: false},
-                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m2", isFake: false},
-                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "from Q", type: "m3", isFake: false},
-                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "from Intrdr", type: "m1", isFake: false},
-                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from P", type: "m2", isFake: false},
-                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "from Q", type: "m3", isFake: false},
-                    ],
-                    sendMsg: [
-                        {sender: "p", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1", isFake: false},
-                        {sender: "q", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2", isFake: false},
-                        {sender: "intrdr", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3", isFake: false},
-                        {sender: "p", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m1", isFake: false},
-                        {sender: "p", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m2", isFake: false},
-                        {sender: "q", receiver: "intrdr", seemSender: "intrdr", ciphertext: "to Intrdr", type: "m3", isFake: false},
-                        {sender: "q", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m1", isFake: false},
-                        {sender: "intrdr", receiver: "p", seemSender: "intrdr", ciphertext: "to P", type: "m2", isFake: false},
-                        {sender: "intrdr", receiver: "q", seemSender: "intrdr", ciphertext: "to Q", type: "m3"}
-                    ]
-                }
-            ],
             network: [
                 {
                     revMsg : [

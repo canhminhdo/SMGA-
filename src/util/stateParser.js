@@ -147,7 +147,6 @@ export function fileContent2message(fileContent){
 
         result.network.push(cloneFormatOneMessage);
     }
-    console.log(result);
     return result;
 }
 

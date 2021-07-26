@@ -49,6 +49,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         const { stage } = this;
         stage.destroyChildren();
         const drawInfo = this.state.data.drawInfo;
+        const self = this;
         let prinLayer = new Konva.Layer(); // for principals
         let msgLayer = new Konva.Layer(); // for messages
         let numPrins = this.state.data.protocol.prins.length;
@@ -62,7 +63,10 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         _.each(prins, (prin) => {
             prinLayer.add(prin);
         });
-        let messages = _.map(this.state.data.protocol.messages, (msgModel) => {
+        let currMessages = _.filter(this.state.data.protocol.network, (msg, idx) => {
+            return idx < self.state.data.protocol.current;
+        });
+        let messages = _.map(currMessages, (msgModel) => {
             let revMsg = _.map(msgModel.revMsg, (msg) => {
                 return ProtocolComponent.getMessageObject(msg, drawInfo, true);
             });
@@ -151,9 +155,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                 let result = event.target.result;
                 let protocol = parser.fileContent2message(result);
                 protocol.current = 0;
-                protocol.messages = [];
                 protocol.interval = null;
-                protocol.interval = false;
                 protocol.speed = 500;
                 const prins = self.state.data.protocol.prins;
                 if (protocol.prins) {
@@ -177,12 +179,10 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
     },
     next: function(event) {
         let current = this.state.data.protocol.current;
-        let messages = this.state.data.protocol.messages;
         let network = this.state.data.protocol.network;
         if (current < network.length) {
-            messages.push(network[current]);
             current ++;
-            this.setState(update(this.state, { data: { protocol: { current: {$set: current}, messages : {$set: messages} } } }));
+            this.setState(update(this.state, { data: { protocol: { current: {$set: current} } } }));
             this.updateData();
             return true;
         }
@@ -190,11 +190,9 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
     },
     prev: function(event) {
         let current = this.state.data.protocol.current;
-        let messages = this.state.data.protocol.messages;
         if (current > 0) {
-            messages.pop();
             current --;
-            this.setState(update(this.state, { data: { protocol: { current: {$set: current}, messages : {$set: messages} } } }));
+            this.setState(update(this.state, { data: { protocol: { current: {$set: current} } } }));
             this.updateData();
         }
     },
@@ -203,8 +201,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         $('html,body').scrollTop(0);
         this.setState(update(this.state, { data: { protocol: {
             isPlaying: {$set: false},
-            current: {$set: 0},
-            messages: {$set: []},
+            current: {$set: 0}
         } } }));
         this.resetStage();
     },
