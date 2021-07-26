@@ -51,7 +51,12 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         const drawInfo = this.state.data.drawInfo;
         let prinLayer = new Konva.Layer(); // for principals
         let msgLayer = new Konva.Layer(); // for messages
-        const prins = _.map(this.state.data.protocol.prins, (prinModel) => {
+        let numPrins = this.state.data.protocol.prins.length;
+        let startX = this.maxWidth / (numPrins + 1);
+        const prins = _.map(this.state.data.protocol.prins, (prinModel, idx) => {
+            prinModel.drawInfo.x = startX * (idx + 1);
+            if (prinModel.drawInfo.y == undefined)
+                prinModel.drawInfo.y = 50;
             return ProtocolComponent.getPrinObject(prinModel, drawInfo);
         });
         _.each(prins, (prin) => {
@@ -159,6 +164,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                     }
                 }
                 self.setState(update(self.state, { data: { protocol: { $set: protocol } } }));
+                self.reset();
                 self.refs.toast.success("Load state sequence successfully.");
             } catch (error) {
                 self.refs.toast.success("Cannot parse state sequence.");
