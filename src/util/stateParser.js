@@ -7,6 +7,7 @@ class Stack {
     constructor()
     {
         this.items = [];
+        this.size = 0;
     }
 
     // Functions to be implemented
@@ -18,6 +19,7 @@ class Stack {
     {
         // push element into the items
         this.items.push(element);
+        this.size++;
     }
     // pop function
     pop()
@@ -28,6 +30,7 @@ class Stack {
 
         if (this.items.length == 0)
             return "Underflow";
+        this.size--;
         return this.items.pop();
     }
     // peek function
@@ -109,10 +112,10 @@ export function fileContent2message(fileContent){
         let parseResult = Parser(messContent);
         let rs = tempResult();
         rs.type = messContent[0] + messContent[1];
-        rs.seemSender = getElementParserByIndexArray(parseResult, [0, 1]);
-        rs.sender = getElementParserByIndexArray(parseResult, [0, 0]);
-        rs.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
-        rs.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
+        rs.seemSender = getElementParserByIndexArray(parseResult, [1]);
+        rs.sender = getElementParserByIndexArray(parseResult, [0]);
+        rs.receiver = getElementParserByIndexArray(parseResult, [2]);
+        rs.ciphertext = getElementParserByIndexArray(parseResult, [3]);
         rs.isFake = dataset[i]['isFake'].trim() == "true";
         let cloneFormatOneMessage = formatOneMessage();
 
@@ -123,10 +126,10 @@ export function fileContent2message(fileContent){
         let rs1 = tempResult();
         if (parseResult.isMessage !== false){
             rs1.type = messContent[0] + messContent[1];
-            rs1.seemSender = getElementParserByIndexArray(parseResult, [0, 1]);
-            rs1.sender = getElementParserByIndexArray(parseResult, [0, 0]);
-            rs1.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
-            rs1.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
+            rs1.seemSender = getElementParserByIndexArray(parseResult, [1]);
+            rs1.sender = getElementParserByIndexArray(parseResult, [0]);
+            rs1.receiver = getElementParserByIndexArray(parseResult, [2]);
+            rs1.ciphertext = getElementParserByIndexArray(parseResult, [3]);
             rs1.isFake = dataset[i]['isFake'].trim() == "true";
             cloneFormatOneMessage.revMsg.push(rs1);
         }
@@ -137,10 +140,10 @@ export function fileContent2message(fileContent){
         let rs2 = tempResult();
         if (parseResult.isMessage !== false){
             rs2.type = messContent[0] + messContent[1];
-            rs2.seemSender = getElementParserByIndexArray(parseResult, [0, 1]);
-            rs2.sender = getElementParserByIndexArray(parseResult, [0, 0]);
-            rs2.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
-            rs2.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
+            rs2.seemSender = getElementParserByIndexArray(parseResult, [1]);
+            rs2.sender = getElementParserByIndexArray(parseResult, [0]);
+            rs2.receiver = getElementParserByIndexArray(parseResult, [2]);
+            rs2.ciphertext = getElementParserByIndexArray(parseResult, [3]);
             rs2.isFake = dataset[i]['isFake'].trim() == "true";
             cloneFormatOneMessage.revMsg.push(rs2);
         }
@@ -238,7 +241,7 @@ function Parser(str){
     var mess = new Message(str);
     let tmp = "";
     let n = str.length;
-    let stack = new Stack;
+    let stack = new Stack();
     let nComma = 0;
     for (let i = 0; i < n; i++){
         if (str[i] === '('){
@@ -248,7 +251,6 @@ function Parser(str){
                 tmp = "";
                 continue;
             }
-
             else{stack.push(str[i]);}
         }
         else if (str[i] === ')'){
@@ -264,7 +266,7 @@ function Parser(str){
                 }
             }
             // case if mess is a fucntion
-            else if (stack._size === 1 && mess.isMessage === true){
+            else if (stack.size === 1 && mess.isMessage === true){
                 if (tmp !== ""){
                     tmp = tmp + str[i];
                     var tmpMess = new Message(tmp.trim());
@@ -276,7 +278,7 @@ function Parser(str){
             }
         }
         else if (str[i] === ','){
-            if (stack.isEmpty() || (stack._size === 1 && mess.isMessage === true)){
+            if (stack.isEmpty() || (stack.size === 1 && mess.isMessage === true)){
                 if (tmp !== ""){
                     var tmpMess = new Message(tmp.trim());
                     tmp = "";
