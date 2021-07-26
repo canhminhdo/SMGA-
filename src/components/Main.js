@@ -80,7 +80,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         }
         const currHeight = this.stage.getHeight();
         if (window.drawInfo.yPos > currHeight - 100) {
-            this.stage.setHeight(currHeight  * 1.5);
+            this.stage.setHeight(currHeight  * 1.2);
             window.scrollTo(0, document.body.scrollHeight);
         }
     },

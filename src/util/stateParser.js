@@ -113,9 +113,9 @@ export function fileContent2message(fileContent){
         rs.sender = getElementParserByIndexArray(parseResult, [0, 0]);
         rs.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
         rs.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
-        rs.isFake = dataset[i]['isFake'].trim();
+        rs.isFake = dataset[i]['isFake'].trim() == "true";
         let cloneFormatOneMessage = formatOneMessage();
-        
+
         cloneFormatOneMessage.sendMsg.push(rs);
         // get recmsg1
         messContent = dataset[i]['recmsg1'];
@@ -127,10 +127,10 @@ export function fileContent2message(fileContent){
             rs1.sender = getElementParserByIndexArray(parseResult, [0, 0]);
             rs1.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
             rs1.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
-            rs1.isFake = dataset[i]['isFake'].trim();
+            rs1.isFake = dataset[i]['isFake'].trim() == "true";
             cloneFormatOneMessage.revMsg.push(rs1);
         }
-        
+
         // get recmsg2
         messContent = dataset[i]['recmsg2'];
         parseResult = Parser(messContent);
@@ -141,10 +141,10 @@ export function fileContent2message(fileContent){
             rs2.sender = getElementParserByIndexArray(parseResult, [0, 0]);
             rs2.receiver = getElementParserByIndexArray(parseResult, [0, 2]);
             rs2.ciphertext = getElementParserByIndexArray(parseResult, [0, 3]);
-            rs2.isFake = dataset[i]['isFake'].trim();
+            rs2.isFake = dataset[i]['isFake'].trim() == "true";
             cloneFormatOneMessage.revMsg.push(rs2);
         }
-        
+
         result.network.push(cloneFormatOneMessage);
     }
     console.log(result);

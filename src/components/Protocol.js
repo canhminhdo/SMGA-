@@ -16,7 +16,7 @@ const MESSAGE_ARROW_WIDTH_DEFAULT = 2;
 
 // messages colors
 const MESSAGE_COLORS = {
-    "default": { backgroundColor: "black", color: "white" },
+    "default": { backgroundColor: "white", color: "black" },
     "m1": {
         // "send": { backgroundColor: "red", color: "white" },
         // "rev": { backgroundColor: "red", color: "white" },
@@ -37,7 +37,8 @@ function textTitle(text, options = {}) {
       fill: options.background || '#ccc',
       stroke: options.border || '#333',
       strokeWidth: options.borderWidth || STROKE_WIDTH_DEFAULT,
-      lineJoin: 'round'
+      lineJoin: 'round',
+      cornerRadius: 5
     }));
     label.add(new Konva.Text({
       text: _.capitalize(text),
@@ -85,7 +86,9 @@ function messageTooltip(msg = {}, options = {}, isRev = false) {
             pointerDirection: 'down',
             pointerWidth: 10,
             pointerHeight: 10,
-            lineJoin: 'round'
+            lineJoin: 'round',
+            stroke: msg.isFake ? 'red' : 'blue',
+            cornerRadius: 5
         })
     );
 
@@ -171,7 +174,7 @@ export function getMessageObject(msg = {}, options = {}, isRev = false) {
         lineCap: "round",
         pointerLength: 5,
         pointerWidth: 5,
-        stroke: msg.isFake == "true" ? MESSAGE_ARROW_INTRDR_COLOR : MESSAGE_ARROW_COLOR_DEFAULT,
+        stroke: msg.isFake ? MESSAGE_ARROW_INTRDR_COLOR : MESSAGE_ARROW_COLOR_DEFAULT,
         strokeWidth: MESSAGE_ARROW_WIDTH_DEFAULT,
     });
     window.drawInfo.yPos += MESSGAGE_PADDING;
