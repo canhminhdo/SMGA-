@@ -10,8 +10,8 @@ const VLINE_STROKE_WIDTH_DEFAULT = "2";
 
 const MESSGAGE_PADDING = 70;
 const INTRDR_ID = "intrdr";
-const MESSAGE_ARROW_INTRDR_COLOR = "#DCDCDC";
-const MESSAGE_ARROW_COLOR_DEFAULT = "black";
+const MESSAGE_ARROW_INTRDR_COLOR = "red";
+const MESSAGE_ARROW_COLOR_DEFAULT = "blue";
 const MESSAGE_ARROW_WIDTH_DEFAULT = 2;
 
 // messages colors
@@ -171,7 +171,7 @@ export function getMessageObject(msg = {}, options = {}, isRev = false) {
         lineCap: "round",
         pointerLength: 5,
         pointerWidth: 5,
-        stroke: msg.sender == INTRDR_ID ? MESSAGE_ARROW_INTRDR_COLOR : MESSAGE_ARROW_COLOR_DEFAULT,
+        stroke: msg.isFake == "true" ? MESSAGE_ARROW_INTRDR_COLOR : MESSAGE_ARROW_COLOR_DEFAULT,
         strokeWidth: MESSAGE_ARROW_WIDTH_DEFAULT,
     });
     window.drawInfo.yPos += MESSGAGE_PADDING;
