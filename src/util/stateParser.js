@@ -133,21 +133,6 @@ export function fileContent2message(fileContent){
             rs1.isFake = dataset[i]['isFake'].trim() == "true";
             cloneFormatOneMessage.revMsg.push(rs1);
         }
-
-        // get recmsg2
-        messContent = dataset[i]['recmsg2'];
-        parseResult = Parser(messContent);
-        let rs2 = tempResult();
-        if (parseResult.isMessage !== false){
-            rs2.type = messContent[0] + messContent[1];
-            rs2.seemSender = getElementParserByIndexArray(parseResult, [1]);
-            rs2.sender = getElementParserByIndexArray(parseResult, [0]);
-            rs2.receiver = getElementParserByIndexArray(parseResult, [2]);
-            rs2.ciphertext = getElementParserByIndexArray(parseResult, [3]);
-            rs2.isFake = dataset[i]['isFake'].trim() == "true";
-            cloneFormatOneMessage.revMsg.push(rs2);
-        }
-
         result.network.push(cloneFormatOneMessage);
     }
     return result;
