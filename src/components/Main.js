@@ -225,6 +225,18 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         const newSpeed = event.target.value;
         this.setState(update(this.state, { data: { protocol: { speed: {$set: newSpeed} } } }));
     },
+    downloadURI: function(uri, name) {
+        let link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    },
+    saveAsImage: function() {
+        let dataURL = this.stage.toDataURL({ pixelRatio: 2 });
+        this.downloadURI(dataURL, 'smga+.png');
+    },
     render() {
         const { fontFamily, fontSize } = this.state.data.drawInfo;
         const { isPlaying, speed } = this.state.data.protocol;
@@ -278,6 +290,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         <MenuItem onClick={ () => this.zoomIn() } >Zoom in</MenuItem>
                         <MenuItem onClick={ () => this.zoomOut() } >Zoom out</MenuItem>
                         <MenuItem onClick={ () => this.resetZoom() } >Reset Zoom</MenuItem>
+                        <MenuItem onClick={ () => this.saveAsImage() } >Save as image</MenuItem>
                     </ContextMenu>
                 </div>
                 <ToastContainer ref="toast"
