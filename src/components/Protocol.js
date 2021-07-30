@@ -9,7 +9,7 @@ const VLINE_COLOR_DEFAULT = "#ccc";
 const VLINE_STROKE_WIDTH_DEFAULT = "2";
 
 const MESSGAGE_PADDING = 70;
-const INTRDR_ID = "intrdr";
+export const INTRDR_ID = "intrdr";
 const MESSAGE_ARROW_INTRDR_COLOR = "red";
 const MESSAGE_ARROW_COLOR_DEFAULT = "blue";
 const MESSAGE_ARROW_WIDTH_DEFAULT = 2;
@@ -150,7 +150,10 @@ function getSendPos(msg, drawInfo) {
             const padding = (drawInfo[msg.receiver].x - drawInfo[INTRDR_ID].x) / 2
             xEnd += padding;
         } else {
-            xEnd = (drawInfo[msg.receiver].x - xStart) / 2;
+            xEnd = drawInfo[msg.receiver].x - xStart;
+            if (msg.receiver != INTRDR_ID) {
+                xEnd = xEnd / 2;
+            }
         }
     }
     return [xStart, yStart, xEnd, yEnd];

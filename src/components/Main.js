@@ -68,8 +68,12 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
         });
         let messages = _.map(currMessages, (msgModel) => {
             let revMsg = _.map(msgModel.revMsg, (msg) => {
+                if (msg.receiver == ProtocolComponent.INTRDR_ID) {
+                    return null;
+                }
                 return ProtocolComponent.getMessageObject(msg, drawInfo, true);
             });
+            revMsg = _.filter(revMsg, (msg) => msg != null);
             let sendMsg = _.map(msgModel.sendMsg, (msg) => {
                 return ProtocolComponent.getMessageObject(msg, drawInfo, false);
             })
@@ -282,7 +286,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         onChange={ this.stateSeqHandler }
                         />
                     </div>
-            
+
                 </div>
                 <div id="protocol-editor" ></div>
                 <div>
