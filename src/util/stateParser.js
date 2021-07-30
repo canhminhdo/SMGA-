@@ -116,7 +116,8 @@ export function fileContent2message(fileContent){
         rs.sender = getElementParserByIndexArray(parseResult, [0]);
         rs.receiver = getElementParserByIndexArray(parseResult, [2]);
         rs.ciphertext = getElementParserByIndexArray(parseResult, [3]);
-        rs.isFake = dataset[i]['isFake'].trim() == "true";
+        // rs.isFake = dataset[i]['isFake'].trim() == "true";
+        rs.isFake = !(rs.sender == rs.seemSender);
         let cloneFormatOneMessage = formatOneMessage();
 
         cloneFormatOneMessage.sendMsg.push(rs);
@@ -130,7 +131,8 @@ export function fileContent2message(fileContent){
             rs1.sender = getElementParserByIndexArray(parseResult, [0]);
             rs1.receiver = getElementParserByIndexArray(parseResult, [2]);
             rs1.ciphertext = getElementParserByIndexArray(parseResult, [3]);
-            rs1.isFake = dataset[i]['isFake'].trim() == "true";
+            // rs1.isFake = dataset[i]['isFake'].trim() == "true";
+            rs1.isFake = !(rs1.sender == rs1.seemSender);
             cloneFormatOneMessage.revMsg.push(rs1);
         }
         result.network.push(cloneFormatOneMessage);

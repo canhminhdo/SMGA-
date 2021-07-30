@@ -237,7 +237,11 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                     <Button className="btn btn-info" disabled={ isPlaying } onClick={ this.prev }><i className="fa fa-step-backward" aria-hidden="true"></i> Prev</Button>
                     <Button className="btn btn-info" disabled={ isPlaying } onClick={ this.next }><i className="fa fa-step-forward" aria-hidden="true"></i> Next</Button>
                     <Button className="btn btn-warning" onClick={this.reset}><i className="fa fa-refresh" aria-hidden="true"></i> Reset</Button>
-                    <Select className="select-font-family"
+                    <div className="slidecontainer">
+                        <input type="range" min="0" max="1000" onChange={this.sliderChange} value={speed} className="slider" />
+                        <span>Value: {speed}ms</span>
+                    </div>
+                    <Select className="select-font-family hidden"
                         name="select-font-family"
                         value={ fontFamily }
                         searchable={ true }
@@ -249,7 +253,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         optionRenderer={ this.renderSelectFontFamily }
                         valueRenderer={ this.renderSelectFontFamily }
                         />
-                    <Select className="select-font-size"
+                    <Select className="select-font-size hidden"
                         name="select-font-size"
                         placeholder={ "Font size" }
                         value={ fontSize }
@@ -266,10 +270,7 @@ var Main = ContextMenuLayer("context_menu_main")(React.createClass({
                         onChange={ this.stateSeqHandler }
                         />
                     </div>
-                    <div className="slidecontainer">
-                        <input type="range" min="0" max="1000" onChange={this.sliderChange} value={speed} className="slider" />
-                        <span>Value: {speed}ms</span>
-                    </div>
+            
                 </div>
                 <div id="protocol-editor" ></div>
                 <div>
